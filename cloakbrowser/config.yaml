@@ -1,0 +1,19 @@
+name: CloakBrowser
+version: "1.0.0"
+slug: cloakbrowser
+description: >-
+  Stealth Chromium (CDP server) that passes bot detection, as a browser
+  backend for changedetection.io and other Playwright/Puppeteer tools.
+url: https://github.com/felipecrs/homeassistant-apps/tree/main/cloakbrowser
+arch:
+  - amd64
+  - aarch64
+init: false
+homeassistant_api: true
+image: ghcr.io/felipecrs/homeassistant-apps/{arch}-cloakbrowser
+options:
+  license_key: ""
+  headless: true
+schema:
+  license_key: str
+  headless: bool
