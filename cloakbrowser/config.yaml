@@ -10,7 +10,6 @@ arch:
   - aarch64
 init: false
 homeassistant_api: true
-image: ghcr.io/felipecrs/homeassistant-apps/{arch}-cloakbrowser
 options:
   license_key: ""
   headless: true
