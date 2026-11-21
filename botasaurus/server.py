@@ -16,11 +16,14 @@ def health():
     return jsonify({"ok": True})
 
 
-@app.get("/fetch")
-def fetch():
-    url = request.args.get("url")
-    if not url:
-        return jsonify({"error": "?url=<encoded url> is required"}), 400
+@app.get("/<path:target>")
+def fetch(target):
+    # The target URL is the raw path, e.g. /https://amazon.com.br/dp/XYZ
+    url = target
+    if request.query_string:
+        url += "?" + request.query_string.decode()
+    if not url.startswith(("http://", "https://")):
+        url = "https://" + url
     try:
         return fetch_page({"url": url})
     except Exception as exc:

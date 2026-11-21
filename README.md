@@ -48,12 +48,13 @@ An experimental stealth-browser HTTP proxy. It fetches a URL with an
 undetected Chromium (headed, anti-detection) and returns the rendered HTML,
 for feeding into changedetection.io.
 
-- Endpoint: `GET /fetch?url=<url-encoded target>` → returns the rendered HTML.
+- Endpoint: `GET /<target-url>` → returns the rendered HTML (no URL-encoding
+  needed), e.g. `http://<hostname>:3000/https://amazon.com.br/dp/B0DH8J5YGH`.
 - `GET /` → health check.
 - Runs on port **3000**; reachable from other add-ons at
   `http://<hostname>:3000`.
 
 To use with changedetection, point a watch's URL at
-`http://<hostname>:3000/fetch?url=<url-encoded target>` and set the fetch
-backend to `html_requests` — the Botasaurus add-on does the browser work.
+`http://<hostname>:3000/<target-url>` and set the fetch backend to
+`html_requests` — the Botasaurus add-on does the browser work.
 
