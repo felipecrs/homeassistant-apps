@@ -7,7 +7,9 @@ polished repo yet.
 
 1. **Never build your own image.** Inherit an upstream image (`FROM ...`) and
    layer only the small patch this app needs on top. Rebuilding a heavy base
-   image is the thing to avoid.
+   image is the thing to avoid. Modern BuildKit syntax (`RUN --mount`,
+   `COPY --chmod`) is fine — but set script exec bits with
+   `git add --chmod=+x` instead of `RUN chmod`.
 2. **Modern app conventions.** Use the current app manifest fields, set
    `homeassistant_api` wherever the app talks to Home Assistant, and use the
    native add-on data path — write to `/data` (mapped to

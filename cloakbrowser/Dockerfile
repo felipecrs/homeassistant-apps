@@ -6,8 +6,8 @@ FROM cloakhq/cloakbrowser:latest
 # data dir (addon_configs), so they survive restarts instead of re-downloading.
 ENV CLOAKBROWSER_CACHE_DIR=/data/cache
 
+# Executable bit is set in git (`git add --chmod=+x`), so no RUN chmod step.
 COPY run.sh /run.sh
-RUN chmod +x /run.sh
 
 # The base image's /entrypoint.sh stays (starts Xvfb for headed mode) and
 # execs our script, which launches cloakserve.
