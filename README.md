@@ -41,3 +41,19 @@ backend by tools like changedetection.io.
   Pass a `?fingerprint=` seed per site to keep a stable identity across checks.
 - **Known limits:** the CDP port has no auth (CDP has none built in), so keep
   it on the internal add-on network — don't publish it to the internet.
+
+### Botasaurus
+
+An experimental stealth-browser HTTP proxy. It fetches a URL with an
+undetected Chromium (headed, anti-detection) and returns the rendered HTML,
+for feeding into changedetection.io.
+
+- Endpoint: `GET /fetch?url=<url-encoded target>` → returns the rendered HTML.
+- `GET /` → health check.
+- Runs on port **3000**; reachable from other add-ons at
+  `http://<hostname>:3000`.
+
+To use with changedetection, point a watch's URL at
+`http://<hostname>:3000/fetch?url=<url-encoded target>` and set the fetch
+backend to `html_requests` — the Botasaurus add-on does the browser work.
+

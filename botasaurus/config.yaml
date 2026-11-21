@@ -1,0 +1,11 @@
+name: Botasaurus
+version: "1.0.0"
+slug: botasaurus
+description: >-
+  Stealth browser HTTP proxy — fetches a URL with an undetected Chromium and
+  returns the rendered HTML, for feeding into changedetection.io.
+url: https://github.com/felipecrs/homeassistant-apps/tree/main/botasaurus
+arch:
+  - amd64
+  - aarch64
+init: false
