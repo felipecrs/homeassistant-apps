@@ -1,3 +1,7 @@
+## 0.70.4-dev.20261120.3
+
+- Removed Caddy and all URL-prefix handling for ingress, to test whether the Home Assistant panel works without it. The app listens on port 5000 directly.
+
 ## 0.70.4-dev.20261120.2
 
 - Ingress and direct access now share port 5000 (`ingress_port` is 5000), so there is no separate ingress port any more.
