@@ -5,10 +5,10 @@ from botasaurus.browser import browser, Driver
 app = FastAPI()
 
 
-@browser(enable_xvfb_virtual_display=True)
+@browser(enable_xvfb_virtual_display=True, raise_exception=True)
 def fetch_page(driver: Driver, data):
     driver.get(data["url"])
-    return driver.page_source
+    return driver.page_html
 
 
 @app.get("/")
