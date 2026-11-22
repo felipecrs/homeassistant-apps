@@ -2,8 +2,9 @@
 
 1. **Never build your own image.** Inherit an upstream image (`FROM ...`) and
    patch on top. Fall back to a base image + package install only when no
-   maintained upstream image exists. Pin the app `version` to the upstream tag
-   and build `FROM upstream:${BUILD_VERSION}` (the Supervisor passes it).
+   maintained upstream image exists. Pin the base by tag and digest
+   (`FROM image:tag@sha256:...`, look it up with `regctl image digest`), and
+   bump `version` in `config.yaml` whenever the digest changes.
 2. **Modern app conventions.** Use the current app manifest keys
    (`homeassistant_api`/`hassio_api` where the app talks to Home Assistant),
    the app's own data, and the new `map` names: `app_config` (not the

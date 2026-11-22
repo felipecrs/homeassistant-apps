@@ -1,5 +1,6 @@
-ARG BUILD_VERSION
-FROM ghcr.io/dgtlmoon/changedetection.io:${BUILD_VERSION}
+# Upstream's dev build (0.70.4 + newer commits), pinned by digest so builds are
+# reproducible. To update: pick the new digest and bump `version` in config.yaml.
+FROM ghcr.io/dgtlmoon/changedetection.io:dev@sha256:49ee6e0500e24a8aa98578b682b1938b96487d1189ecb76f0f5f83df91518e7d
 
 # Ingress: nginx accepts only the Supervisor and turns Home Assistant's
 # X-Ingress-Path header into the X-Forwarded-Prefix that changedetection reads
