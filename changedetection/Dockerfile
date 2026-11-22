@@ -2,10 +2,12 @@
 # reproducible. To update: pick the new digest and bump `version` in config.yaml.
 FROM ghcr.io/dgtlmoon/changedetection.io:dev@sha256:49ee6e0500e24a8aa98578b682b1938b96487d1189ecb76f0f5f83df91518e7d
 
-# Caddy fronts the app on two ports. changedetection takes its URL prefix and
-# session cookie path from X-Forwarded-Prefix and never resets them, so each
-# request must carry its own: the ingress path on 8099 (Supervisor only), an empty
-# one on 5000 (other apps and reverse proxies). No automatic HTTPS, no admin API.
+# Caddy fronts the app on port 5000, for ingress and direct access alike.
+# changedetection takes its URL prefix and session cookie path from
+# X-Forwarded-Prefix and never resets them, so every request must carry its own:
+# the ingress path when it comes from the Supervisor, an empty one otherwise
+# (which also keeps clients from spoofing X-Ingress-Path).
+# No automatic HTTPS, no admin API.
 COPY --from=caddy:2@sha256:4851e54a46b206517c574821bb5cc67f170d2156041e9fbc4c9193b45e84a75b /usr/bin/caddy /usr/local/bin/caddy
 
 COPY <<'EOF' /etc/caddy/Caddyfile
@@ -18,17 +20,17 @@ COPY <<'EOF' /etc/caddy/Caddyfile
 	}
 }
 
-:8099 {
-	@other not remote_ip 172.30.32.2
-	respond @other 403
-	reverse_proxy 127.0.0.1:5001 {
-		header_up X-Forwarded-Prefix {header.X-Ingress-Path}
-	}
-}
-
 :5000 {
-	reverse_proxy 127.0.0.1:5001 {
-		header_up X-Forwarded-Prefix ""
+	@ingress remote_ip 172.30.32.2
+	handle @ingress {
+		reverse_proxy 127.0.0.1:5001 {
+			header_up X-Forwarded-Prefix {header.X-Ingress-Path}
+		}
+	}
+	handle {
+		reverse_proxy 127.0.0.1:5001 {
+			header_up X-Forwarded-Prefix ""
+		}
 	}
 }
 EOF

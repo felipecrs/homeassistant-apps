@@ -17,9 +17,11 @@
    exec bits with `git add --chmod=+x`, not `RUN chmod`.
 4. **Less is more.** Fewest files and moving parts. Keep `icon.png` and
    `logo.png`; skip CI and other boilerplate unless it earns its place.
-5. **Web UIs use ingress** (Home Assistant handles auth): accept only
-   `172.30.32.2`, read the `X-Ingress-Path` header, and keep host ports off by
-   default (`ports: {5000/tcp: null}`). When a proxy is needed, use Caddy
+5. **Web UIs use ingress** (Home Assistant handles auth): set `ingress_port`
+   to the app's own port, only trust `X-Ingress-Path` from `172.30.32.2`, and
+   keep host ports off by default (`ports: {5000/tcp: null}`). Test with a
+   Docker network on `172.30.32.0/23` and a client at `172.30.32.2`. When a
+   proxy is needed, use Caddy
    (`COPY --from=caddy:2@sha256:... /usr/bin/caddy`, never nginx) and always set
    `auto_https off` and `admin off`: no Let's Encrypt, no admin API.
 6. **Leave `init` at its default** unless the base image has its own init. Use a
