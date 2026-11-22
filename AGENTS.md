@@ -68,3 +68,11 @@
     whole file); a version that is a text prefix of newer ones (`0.70.4` against
     `0.70.4-dev…`, `.1` against `.10`) cuts the notes short; put
     backward-incompatible changes at the top of the newest entry.
+15. **Deploy and verify on the user's Home Assistant yourself.** The ssh MCP
+    (profile `homeassistant`) gives a shell on the instance, where the `ha` CLI
+    manages apps. After pushing: `ha store reload`, then `ha apps info <slug>`
+    (`version_latest` must match `config.yaml`), then `ha apps update <slug>`
+    (`ha apps rebuild <slug>` for the same version), then `ha apps logs <slug>`
+    and `ha apps changelog <slug>` (shows what users will be offered). Slugs are
+    `72547810_<folder>` and hostnames `72547810-<folder>`. The ssh tool gives up
+    after 2 minutes, so start long commands with `nohup … &` and poll.
