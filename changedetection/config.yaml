@@ -1,7 +1,7 @@
 name: changedetection.io
 # Upstream version, the date of the pinned dev image in the Dockerfile, and our
 # own revision. Bump it on every change to this app.
-version: "0.70.4-dev.20261120.6"
+version: "0.70.4-dev.20261120.7"
 slug: changedetection
 description: Website change detection, restock and price monitoring, with notifications
 url: https://github.com/felipecrs/homeassistant-apps/tree/main/changedetection

@@ -1,3 +1,7 @@
+## 0.70.4-dev.20261120.7
+
+- The image now includes the system libraries a Chromium-based browser needs (and `fonts-liberation`), for plugins that bring their own browser. They are installed from the dependencies of Debian's `chromium` package, without the browser itself, about 30 MB.
+
 ## 0.70.4-dev.20261120.6
 
 - The app trusts the `X-Forwarded-*` headers of a reverse proxy again (`USE_X_SETTINGS=1`), as the old app did. Behind a proxy it now knows its public address and https, so absolute links, and the sign-in (OAuth) addresses of its MCP server, are right.

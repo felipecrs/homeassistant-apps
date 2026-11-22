@@ -5,6 +5,9 @@
    maintained upstream image exists. Pin everything that matters: base images by
    tag and digest (`FROM image:tag@sha256:...`, look it up with
    `regctl image digest`) and Python packages with `==`.
+   Don't hand-write a list of system libraries: derive it from what already
+   knows it, for example the `Depends` of Debian's `chromium` package through
+   `apt-cache depends`, and check the result with `ldd` or `ldconfig -p`.
 2. **Modern app conventions.** Use the current app manifest keys
    (`homeassistant_api`/`hassio_api` where the app talks to Home Assistant),
    the app's own data, and the new `map` names: `app_config` (not the

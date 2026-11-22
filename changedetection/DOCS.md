@@ -21,6 +21,9 @@ The app trusts the `X-Forwarded-*` headers (`USE_X_SETTINGS`), so behind a rever
 proxy it uses your public address and https. Anyone who can reach its port can
 set those headers, so keep the host port off unless you need it.
 
+The image includes the system libraries a Chromium-based browser needs, for
+plugins that bring their own browser. The browser itself is not included.
+
 Anything a plugin downloads is lost when the app is rebuilt, unless it is stored
 under `/data` (private to the app) or `/config` (the app's config folder). Point
 the plugin at one of them with an environment variable.
