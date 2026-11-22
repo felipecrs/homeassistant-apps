@@ -12,9 +12,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get update && apt-get install -y --no-install-recommends google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
-RUN uv pip install --system --no-cache botasaurus flask
+RUN uv pip install --system --no-cache botasaurus flask waitress
 
 COPY server.py /server.py
 
-EXPOSE 3000
+EXPOSE 80
 CMD ["python", "/server.py"]

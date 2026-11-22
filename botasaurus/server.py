@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from waitress import serve
 
 from botasaurus.browser import browser, Driver
 
@@ -18,7 +19,6 @@ def health():
 
 @app.get("/<path:target>")
 def fetch(target):
-    # The target URL is the raw path, e.g. /https://amazon.com.br/dp/XYZ
     url = target
     if request.query_string:
         url += "?" + request.query_string.decode()
@@ -31,4 +31,6 @@ def fetch(target):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=3000)
+    # Production WSGI server (Flask's built-in dev server prints a warning and
+    # isn't meant for this). threads=1 so each browser launch is serialized.
+    serve(app, host="0.0.0.0", port=80, threads=1)
