@@ -2,9 +2,9 @@
 
 1. **Never build your own image.** Inherit an upstream image (`FROM ...`) and
    patch on top. Fall back to a base image + package install only when no
-   maintained upstream image exists. Pin the base by tag and digest
-   (`FROM image:tag@sha256:...`, look it up with `regctl image digest`), and
-   bump `version` in `config.yaml` whenever the digest changes.
+   maintained upstream image exists. Pin everything that matters: base images by
+   tag and digest (`FROM image:tag@sha256:...`, look it up with
+   `regctl image digest`) and Python packages with `==`.
 2. **Modern app conventions.** Use the current app manifest keys
    (`homeassistant_api`/`hassio_api` where the app talks to Home Assistant),
    the app's own data, and the new `map` names: `app_config` (not the
@@ -37,3 +37,29 @@
 11. **Say "app", never "add-on".**
 12. **Test the build locally** before pushing: `wsl.exe docker build`, and
     smoke-test the container.
+13. **Bump `version` on every change to an app.** Any change to its
+    `config.yaml`, `Dockerfile`, scripts or translations bumps `version` in
+    `config.yaml` in the same commit, with a `CHANGELOG.md` entry (docs-only
+    changes don't). Without a bump users never get the change: the Supervisor
+    offers an update when `version` differs from the installed one (a plain
+    string comparison in `supervisor/apps/app.py`, not an ordering) and rebuilds
+    from the Dockerfile when they update.
+    - Scheme: `<upstream version>[-dev.<YYYYMMDD>].<revision>`.
+    - The upstream version is the one of the pinned image or package the app
+      wraps (changedetection `0.70.4-dev.20261120.2`, Botasaurus `4.0.97.1`,
+      CloakBrowser `0.7.3.1`).
+    - `-dev.<YYYYMMDD>` is added only when tracking a moving tag like `dev`; the
+      date is the one of the pinned image.
+    - The revision starts at 1 and resets whenever the upstream part changes.
+    - Ordering is not reliable with this scheme, so don't use `breaking_versions`
+      without checking it first.
+14. **`CHANGELOG.md` is read by pattern.** When an update is available, Home
+    Assistant Core (`async_release_notes`, `components/hassio/update.py`) shows
+    the part of the file found with `^#* <latest>\n` up to the first line that
+    starts with `#* <installed>`; the Supervisor only serves the raw file.
+    So: newest version first; every heading is exactly `## <version>` and
+    nothing else on the line (no brackets, dates or links — Keep a Changelog
+    headings like `## [1.0.0] - 2026-01-01` don't match, and then users get the
+    whole file); a version that is a text prefix of newer ones (`0.70.4` against
+    `0.70.4-dev…`, `.1` against `.10`) cuts the notes short; put
+    backward-incompatible changes at the top of the newest entry.

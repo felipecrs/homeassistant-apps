@@ -1,5 +1,6 @@
 name: Botasaurus
-version: "1.0.0"
+# Pinned botasaurus version plus our own revision. Bump it on every change to this app.
+version: "4.0.97.1"
 slug: botasaurus
 description: >-
   Stealth browser HTTP proxy — fetches a URL with an undetected Chromium and
