@@ -1,0 +1,11 @@
+configuration:
+  env_vars:
+    name: Environment variables
+    description: Extra environment variables for changedetection.io, like BASE_URL, TZ, PLAYWRIGHT_DRIVER_URL or EXTRA_PACKAGES.
+    fields:
+      name:
+        name: Name
+      value:
+        name: Value
+network:
+  5000/tcp: Web interface (not needed for ingress)
