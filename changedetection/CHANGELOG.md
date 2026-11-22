@@ -1,3 +1,7 @@
+## 0.70.4-dev.20261120.8
+
+- Added `git` to the image, so `EXTRA_PACKAGES` can install plugins from `git+https://` addresses.
+
 ## 0.70.4-dev.20261120.7
 
 - The image now includes the system libraries a Chromium-based browser needs (and `fonts-liberation`), for plugins that bring their own browser. They are installed from the dependencies of Debian's `chromium` package, without the browser itself, about 30 MB.

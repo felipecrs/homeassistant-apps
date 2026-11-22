@@ -7,8 +7,9 @@ FROM ghcr.io/dgtlmoon/changedetection.io:dev@sha256:49ee6e0500e24a8aa98578b682b1
 # (without recommends), so there is no list to maintain, and the browser itself
 # is not installed: only chromium-common and virtual packages are filtered out.
 # Chromium's dependencies include no font, so fonts-liberation is added.
+# git lets EXTRA_PACKAGES install plugins from git+https:// addresses.
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends fonts-liberation \
+    && apt-get install -y --no-install-recommends fonts-liberation git \
         $(apt-cache depends --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances chromium \
             | awk '/^ *\|?Depends:/ {print $2}' | grep -vE '^(chromium|<)') \
     && rm -rf /var/lib/apt/lists/*

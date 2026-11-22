@@ -13,9 +13,11 @@ Website change detection, restock and price monitoring, with notifications.
 ## Options
 
 - **Environment variables**: extra variables passed to changedetection.io, for
-  example `BASE_URL`, `TZ`, `PLAYWRIGHT_DRIVER_URL`, `EXTRA_PACKAGES` (plugins),
-  or `ALLOW_IANA_RESTRICTED_ADDRESSES` (to watch URLs on your local network).
-  See the upstream documentation for the full list.
+  example `BASE_URL`, `TZ`, `PLAYWRIGHT_DRIVER_URL`, `EXTRA_PACKAGES` (plugins,
+  also from `git+https://` addresses), or `ALLOW_IANA_RESTRICTED_ADDRESSES` (to
+  watch URLs on your local network). See the upstream documentation for the full
+  list. If the packages in `EXTRA_PACKAGES` fail to install, the app does not
+  start: fix the value and start it again.
 
 The app trusts the `X-Forwarded-*` headers (`USE_X_SETTINGS`), so behind a reverse
 proxy it uses your public address and https. Anyone who can reach its port can
