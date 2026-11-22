@@ -69,10 +69,22 @@
     `0.70.4-dev…`, `.1` against `.10`) cuts the notes short; put
     backward-incompatible changes at the top of the newest entry.
 15. **Deploy and verify on the user's Home Assistant yourself.** The ssh MCP
-    (profile `homeassistant`) gives a shell on the instance, where the `ha` CLI
-    manages apps. After pushing: `ha store reload`, then `ha apps info <slug>`
-    (`version_latest` must match `config.yaml`), then `ha apps update <slug>`
-    (`ha apps rebuild <slug>` for the same version), then `ha apps logs <slug>`
-    and `ha apps changelog <slug>` (shows what users will be offered). Slugs are
-    `72547810_<folder>` and hostnames `72547810-<folder>`. The ssh tool gives up
-    after 2 minutes, so start long commands with `nohup … &` and poll.
+    (profile `homeassistant`, tool `ssh:run-command`) gives a shell on the
+    instance, where the `ha` CLI manages apps. Slugs are `72547810_<folder>`,
+    hostnames `72547810-<folder>`, containers `app_72547810_<folder>`.
+    - After pushing run `ha store reload`. Without it `version_latest` stays on
+      an older commit and a pending update can look absent.
+    - Check with `ha apps info <slug> | grep -E '^(state|version|version_latest|update_available):'`;
+      `version_latest` must match `config.yaml`.
+    - Deploy with `ha apps update <slug>` (`ha apps rebuild <slug>` for the same
+      version). It prints nothing until it finishes and can take many minutes,
+      because the Supervisor builds in a helper container and the first pull of
+      a base image is slow on this host (about 0.2 MB/s observed).
+    - The ssh tool gives up after about a minute: start long commands with
+      `nohup … > /tmp/x.log 2>&1 &`, then poll with short commands (`sleep`
+      at most 40).
+    - Follow a build with `docker logs app_builder_<slug> --tail 3` and
+      `ha jobs info | grep -E 'name:|done:'` (an `app_update` job with
+      `done: false` is still running).
+    - Afterwards: `ha apps logs <slug>`, `docker logs app_<slug> --tail 30`, and
+      `ha apps changelog <slug>` (what users will be offered).
