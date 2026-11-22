@@ -1,3 +1,7 @@
+## 4.0.97.2
+
+- The app now runs with Docker's init (`init` is no longer turned off), which reaps leftover processes and forwards stop signals.
+
 ## 4.0.97.1
 
 - Versions now follow the pinned Botasaurus release (4.0.97). The base image, Botasaurus, FastAPI and uvicorn are all pinned.

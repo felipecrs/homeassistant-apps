@@ -1,6 +1,6 @@
 name: Botasaurus
 # Pinned botasaurus version plus our own revision. Bump it on every change to this app.
-version: "4.0.97.1"
+version: "4.0.97.2"
 slug: botasaurus
 description: >-
   Stealth browser HTTP proxy — fetches a URL with an undetected Chromium and
@@ -9,4 +9,3 @@ url: https://github.com/felipecrs/homeassistant-apps/tree/main/botasaurus
 arch:
   - amd64
   - aarch64
-init: false

@@ -1,6 +1,6 @@
 name: CloakBrowser
 # Upstream version plus our own revision. Bump it on every change to this app.
-version: "0.7.3.1"
+version: "0.7.3.2"
 slug: cloakbrowser
 description: >-
   Stealth Chromium (CDP server) that passes bot detection, as a browser
@@ -9,7 +9,6 @@ url: https://github.com/felipecrs/homeassistant-apps/tree/main/cloakbrowser
 arch:
   - amd64
   - aarch64
-init: false
 homeassistant_api: true
 options:
   license_key: ""

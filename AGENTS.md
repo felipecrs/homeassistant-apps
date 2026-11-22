@@ -24,8 +24,13 @@
    proxy is needed, use Caddy
    (`COPY --from=caddy:2@sha256:... /usr/bin/caddy`, never nginx) and always set
    `auto_https off` and `admin off`: no Let's Encrypt, no admin API.
-6. **Leave `init` at its default** unless the base image has its own init. Use a
-   `tcp://` watchdog, so an app login redirect can't look unhealthy.
+6. **Set `init` by what the image has.** Images without a real init system
+   (most upstream images; Python, Node and browser apps) use `init: true`, which
+   is the default, so leave the key out: Docker's init then reaps child
+   processes and forwards stop signals. Images that bake in their own init,
+   like s6-overlay (Home Assistant base images, linuxserver.io), must set
+   `init: false`. Use a `tcp://` watchdog, so an app login redirect can't look
+   unhealthy.
 7. **Options get `translations/en.yaml`** (names, descriptions, ports).
 8. **Docs live per-app.** The root README does not document individual apps.
    Each app has `DOCS.md` and a `README.md` symlinked to it (HA renders it).
