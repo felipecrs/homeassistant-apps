@@ -5,7 +5,7 @@ from botasaurus.browser import browser, Driver
 app = Flask(__name__)
 
 
-@browser
+@browser(enable_xvfb_virtual_display=True)
 def fetch_page(driver: Driver, data):
     driver.get(data["url"])
     return driver.page_source
