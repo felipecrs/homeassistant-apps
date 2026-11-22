@@ -12,16 +12,18 @@
    `all_app_configs` (mounted at `/app_configs`). Use the `map` list form
    (`type`/`read_only`/`path`), not the old short form.
    Need a persistent folder for something else (a cache, a download)? Point the
-   software at it with `environment:` in `config.yaml`, for example
-   `CLOAKBROWSER_CACHE_DIR: /data/cloakbrowser`. `map` can't add one: it keeps
-   one entry per type, and `type: data` with a `path` moves `/data` instead of
-   adding a mount. A symlink also works, but the variable needs no extra step.
+   software at one under `/data` with an environment variable. `map` can't add
+   a folder: it keeps one entry per type, and `type: data` with a `path` moves
+   `/data` instead of adding a mount. A symlink also works, but the variable
+   needs no extra step.
 3. **BuildKit is available** — use modern Dockerfile syntax (`RUN --mount`,
    `COPY --chmod`, heredocs). Put small configs and scripts inline with
    `COPY <<'EOF' /path` instead of extra files. For files that live in git, set
    exec bits with `git add --chmod=+x`, not `RUN chmod`.
 4. **Less is more.** Fewest files and moving parts. Keep `icon.png` and
-   `logo.png`; skip CI and other boilerplate unless it earns its place.
+   `logo.png`; skip CI and other boilerplate unless it earns its place. Stay
+   agnostic to optional plugins: no settings for them in the app, users add
+   those through the environment variables option.
 5. **Web UIs use ingress** (Home Assistant handles auth): set `ingress_port`
    to the app's own port, only trust `X-Ingress-Path` from `172.30.32.2`, and
    keep host ports off by default (`ports: {5000/tcp: null}`). Test with a

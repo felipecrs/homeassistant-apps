@@ -1,3 +1,7 @@
+## 0.70.4-dev.20261120.5
+
+- Removed the CloakBrowser cache setting added in the previous version: the app stays independent of plugins. If you use that plugin, add `CLOAKBROWSER_CACHE_DIR` with a folder under `/data` (for example `/data/cloakbrowser`) to the environment variables to keep its download across rebuilds.
+
 ## 0.70.4-dev.20261120.4
 
 - The CloakBrowser plugin's browser download (about 200 MB) now goes to the app's data folder through `CLOAKBROWSER_CACHE_DIR=/data/cloakbrowser`, so it survives rebuilds. Nothing to set. The libraries Chromium needs are still not included.

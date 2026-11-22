@@ -1,17 +1,13 @@
 name: changedetection.io
 # Upstream version, the date of the pinned dev image in the Dockerfile, and our
 # own revision. Bump it on every change to this app.
-version: "0.70.4-dev.20261120.4"
+version: "0.70.4-dev.20261120.5"
 slug: changedetection
 description: Website change detection, restock and price monitoring, with notifications
 url: https://github.com/felipecrs/homeassistant-apps/tree/main/changedetection
 arch:
   - amd64
   - aarch64
-# Keeps the CloakBrowser plugin's ~200 MB browser download in the app's private
-# data folder, so it survives rebuilds without asking users to set anything.
-environment:
-  CLOAKBROWSER_CACHE_DIR: /data/cloakbrowser
 ingress: true
 ingress_port: 5000
 panel_icon: mdi:vector-difference
