@@ -3,7 +3,7 @@
 FROM cloakhq/cloakbrowser:latest
 
 # Persist the ~200MB Chromium binary + browser profiles in the app's own
-# data dir (addon_configs), so they survive restarts instead of re-downloading.
+# data dir (app_configs), so they survive restarts instead of re-downloading.
 ENV CLOAKBROWSER_CACHE_DIR=/data/cache
 
 # Executable bit is set in git (`git add --chmod=+x`), so no RUN chmod step.
