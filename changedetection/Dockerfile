@@ -14,6 +14,27 @@ RUN apt-get update \
             | awk '/^ *\|?Depends:/ {print $2}' | grep -vE '^(chromium|<)') \
     && rm -rf /var/lib/apt/lists/*
 
+# Screenshots assume every page has a viewport, but stealth browsers (CloakBrowser,
+# Camoufox) open pages without one, so the fetch dies with "'NoneType' object is
+# not subscriptable" right after the page loaded. Pin a viewport equal to the
+# window size when there is none. The assert fails the build if a new upstream
+# digest changes that line, so the patch is never silently skipped; drop it once
+# upstream handles it (see the pull request "Make browser viewport configurable").
+RUN python - <<'PY'
+import pathlib
+path = pathlib.Path("/app/changedetectionio/content_fetchers/playwright.py")
+source = path.read_text()
+old = "    original_viewport = page.viewport_size\n"
+new = old + (
+    "    if original_viewport is None:\n"
+    "        window = await page.evaluate('({width: window.innerWidth, height: window.innerHeight})')\n"
+    "        original_viewport = {'width': window['width'] or 1280, 'height': window['height'] or 1024}\n"
+    "        await page.set_viewport_size(original_viewport)\n"
+)
+assert source.count(old) == 1, "upstream changed capture_full_page_async: review the viewport patch"
+path.write_text(source.replace(old, new))
+PY
+
 # Export the "env_vars" option as environment variables, then hand over to
 # upstream's entrypoint. The datastore is the app's /config folder.
 COPY --chmod=755 <<'EOF' /run.sh

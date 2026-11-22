@@ -1,3 +1,7 @@
+## 0.70.4-dev.20261120.9
+
+- Fixed fetches failing with `'NoneType' object is not subscriptable` for browsers that open pages without a viewport, such as the CloakBrowser and Camoufox plugins. The page loaded, then the screenshot step crashed. A viewport equal to the window size is now set when there is none. The build fails if a new upstream version changes that code, so the patch is reviewed instead of silently skipped.
+
 ## 0.70.4-dev.20261120.8
 
 - Added `git` to the image, so `EXTRA_PACKAGES` can install plugins from `git+https://` addresses.

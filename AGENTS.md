@@ -5,6 +5,10 @@
    maintained upstream image exists. Pin everything that matters: base images by
    tag and digest (`FROM image:tag@sha256:...`, look it up with
    `regctl image digest`) and Python packages with `==`.
+   If upstream code must be patched, do it at build time and make the build
+   fail when upstream changes the text (an `assert` on the exact line), test it
+   against the failure it fixes, and say in a comment what upstream change makes
+   the patch removable.
    Don't hand-write a list of system libraries: derive it from what already
    knows it, for example the `Depends` of Debian's `chromium` package through
    `apt-cache depends`, and check the result with `ldd` or `ldconfig -p`.
