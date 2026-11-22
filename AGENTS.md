@@ -86,5 +86,8 @@
     - Follow a build with `docker logs app_builder_<slug> --tail 3` and
       `ha jobs info | grep -E 'name:|done:'` (an `app_update` job with
       `done: false` is still running).
+    - It is done when the builder container is gone, the log file says "Command
+      completed successfully.", `ha apps info` shows `update_available: false`,
+      and `docker ps` shows the image `72547810/<arch>-addon-<folder>:<version>`.
     - Afterwards: `ha apps logs <slug>`, `docker logs app_<slug> --tail 30`, and
       `ha apps changelog <slug>` (what users will be offered).
