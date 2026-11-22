@@ -7,4 +7,5 @@ description: >-
 url: https://github.com/felipecrs/homeassistant-apps/tree/main/botasaurus
 arch:
   - amd64
+  - aarch64
 init: false
