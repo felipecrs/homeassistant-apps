@@ -11,6 +11,11 @@
    deprecated `addon_config`), `homeassistant_config` (not `config`),
    `all_app_configs` (mounted at `/app_configs`). Use the `map` list form
    (`type`/`read_only`/`path`), not the old short form.
+   Need a persistent folder for something else (a cache, a download)? Point the
+   software at it with `environment:` in `config.yaml`, for example
+   `CLOAKBROWSER_CACHE_DIR: /data/cloakbrowser`. `map` can't add one: it keeps
+   one entry per type, and `type: data` with a `path` moves `/data` instead of
+   adding a mount. A symlink also works, but the variable needs no extra step.
 3. **BuildKit is available** — use modern Dockerfile syntax (`RUN --mount`,
    `COPY --chmod`, heredocs). Put small configs and scripts inline with
    `COPY <<'EOF' /path` instead of extra files. For files that live in git, set

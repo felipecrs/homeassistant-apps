@@ -1,3 +1,7 @@
+## 0.70.4-dev.20261120.4
+
+- The CloakBrowser plugin's browser download (about 200 MB) now goes to the app's data folder through `CLOAKBROWSER_CACHE_DIR=/data/cloakbrowser`, so it survives rebuilds. Nothing to set. The libraries Chromium needs are still not included.
+
 ## 0.70.4-dev.20261120.3
 
 - Removed Caddy and all URL-prefix handling for ingress, to test whether the Home Assistant panel works without it. The app listens on port 5000 directly.
