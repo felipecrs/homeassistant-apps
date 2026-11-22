@@ -2,45 +2,38 @@
 # reproducible. To update: pick the new digest and bump `version` in config.yaml.
 FROM ghcr.io/dgtlmoon/changedetection.io:dev@sha256:49ee6e0500e24a8aa98578b682b1938b96487d1189ecb76f0f5f83df91518e7d
 
-# Ingress: nginx accepts only the Supervisor and turns Home Assistant's
-# X-Ingress-Path header into the X-Forwarded-Prefix that changedetection reads
-# (it is enabled by USE_X_SETTINGS in config.yaml).
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends nginx \
-    && rm -rf /var/lib/apt/lists/*
+# Caddy fronts the app on two ports. changedetection takes its URL prefix and
+# session cookie path from X-Forwarded-Prefix and never resets them, so each
+# request must carry its own: the ingress path on 8099 (Supervisor only), an empty
+# one on 5000 (other apps and reverse proxies). No automatic HTTPS, no admin API.
+COPY --from=caddy:2@sha256:4851e54a46b206517c574821bb5cc67f170d2156041e9fbc4c9193b45e84a75b /usr/bin/caddy /usr/local/bin/caddy
 
-COPY <<'EOF' /etc/nginx/nginx.conf
-pid /run/nginx.pid;
-error_log stderr warn;
-events {}
-http {
-    access_log off;
-    map $http_upgrade $connection_upgrade {
-        default upgrade;
-        "" close;
-    }
-    server {
-        listen 8099;
-        allow 172.30.32.2;
-        deny all;
-        client_max_body_size 0;
-        location / {
-            proxy_pass http://127.0.0.1:5000;
-            proxy_http_version 1.1;
-            proxy_read_timeout 1d;
-            proxy_set_header Host $http_host;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection $connection_upgrade;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Host $host;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header X-Forwarded-Prefix $http_x_ingress_path;
-        }
-    }
+COPY <<'EOF' /etc/caddy/Caddyfile
+{
+	auto_https off
+	admin off
+	persist_config off
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+:8099 {
+	@other not remote_ip 172.30.32.2
+	respond @other 403
+	reverse_proxy 127.0.0.1:5001 {
+		header_up X-Forwarded-Prefix {header.X-Ingress-Path}
+	}
+}
+
+:5000 {
+	reverse_proxy 127.0.0.1:5001 {
+		header_up X-Forwarded-Prefix ""
+	}
 }
 EOF
 
-# Export the "env_vars" option as environment variables, start nginx, then hand
+# Export the "env_vars" option as environment variables, start Caddy, then hand
 # over to upstream's entrypoint. The datastore is the app's /config folder.
 COPY --chmod=755 <<'EOF' /run.sh
 #!/usr/bin/env bash
@@ -51,8 +44,8 @@ for e in json.load(open("/data/options.json")).get("env_vars", []):
     print(f"export {e['name']}={shlex.quote(e.get('value') or '')}")
 PY
 )"
-nginx
-exec /docker-entrypoint.sh python ./changedetection.py -d /config
+caddy run --config /etc/caddy/Caddyfile &
+exec /docker-entrypoint.sh python ./changedetection.py -h 127.0.0.1 -p 5001 -d /config
 EOF
 
 ENTRYPOINT ["/run.sh"]

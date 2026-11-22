@@ -19,7 +19,9 @@
    `logo.png`; skip CI and other boilerplate unless it earns its place.
 5. **Web UIs use ingress** (Home Assistant handles auth): accept only
    `172.30.32.2`, read the `X-Ingress-Path` header, and keep host ports off by
-   default (`ports: {5000/tcp: null}`).
+   default (`ports: {5000/tcp: null}`). When a proxy is needed, use Caddy
+   (`COPY --from=caddy:2@sha256:... /usr/bin/caddy`, never nginx) and always set
+   `auto_https off` and `admin off`: no Let's Encrypt, no admin API.
 6. **Leave `init` at its default** unless the base image has its own init. Use a
    `tcp://` watchdog, so an app login redirect can't look unhealthy.
 7. **Options get `translations/en.yaml`** (names, descriptions, ports).
