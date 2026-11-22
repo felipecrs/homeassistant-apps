@@ -17,6 +17,10 @@ Website change detection, restock and price monitoring, with notifications.
   or `ALLOW_IANA_RESTRICTED_ADDRESSES` (to watch URLs on your local network).
   See the upstream documentation for the full list.
 
+The app trusts the `X-Forwarded-*` headers (`USE_X_SETTINGS`), so behind a reverse
+proxy it uses your public address and https. Anyone who can reach its port can
+set those headers, so keep the host port off unless you need it.
+
 Anything a plugin downloads is lost when the app is rebuilt, unless it is stored
 under `/data` (private to the app) or `/config` (the app's config folder). Point
 the plugin at one of them with an environment variable.

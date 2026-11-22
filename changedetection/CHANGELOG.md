@@ -1,3 +1,8 @@
+## 0.70.4-dev.20261120.6
+
+- The app trusts the `X-Forwarded-*` headers of a reverse proxy again (`USE_X_SETTINGS=1`), as the old app did. Behind a proxy it now knows its public address and https, so absolute links, and the sign-in (OAuth) addresses of its MCP server, are right.
+- This alone does not make the Home Assistant panel work: that also needs a URL prefix, which Home Assistant does not send in the header changedetection reads.
+
 ## 0.70.4-dev.20261120.5
 
 - Removed the CloakBrowser cache setting added in the previous version: the app stays independent of plugins. If you use that plugin, add `CLOAKBROWSER_CACHE_DIR` with a folder under `/data` (for example `/data/cloakbrowser`) to the environment variables to keep its download across rebuilds.

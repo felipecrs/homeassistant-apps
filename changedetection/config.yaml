@@ -1,13 +1,18 @@
 name: changedetection.io
 # Upstream version, the date of the pinned dev image in the Dockerfile, and our
 # own revision. Bump it on every change to this app.
-version: "0.70.4-dev.20261120.5"
+version: "0.70.4-dev.20261120.6"
 slug: changedetection
 description: Website change detection, restock and price monitoring, with notifications
 url: https://github.com/felipecrs/homeassistant-apps/tree/main/changedetection
 arch:
   - amd64
   - aarch64
+# Trust X-Forwarded-* from a reverse proxy: the app then knows its public address
+# and https. Anyone who can reach the app's port can set those headers, so keep
+# the host port off unless it is needed.
+environment:
+  USE_X_SETTINGS: "1"
 ingress: true
 ingress_port: 5000
 panel_icon: mdi:vector-difference
