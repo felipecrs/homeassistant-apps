@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get update && apt-get install -y --no-install-recommends google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
-RUN uv pip install --system --no-cache botasaurus flask waitress
+RUN uv pip install --system --no-cache botasaurus fastapi uvicorn
 
 COPY server.py /server.py
 

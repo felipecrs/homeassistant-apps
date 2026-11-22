@@ -2,7 +2,7 @@
 # shortcut: `latest` auto-tracks upstream stealth builds; pin a tag if reproducibility matters.
 FROM cloakhq/cloakbrowser:latest
 
-# Persist the ~200MB Chromium binary + browser profiles in the add-on's own
+# Persist the ~200MB Chromium binary + browser profiles in the app's own
 # data dir (addon_configs), so they survive restarts instead of re-downloading.
 ENV CLOAKBROWSER_CACHE_DIR=/data/cache
 
